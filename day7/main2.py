@@ -1,5 +1,29 @@
+def verify(target, total, nums):
+  if len(nums) == 0:
+    return total
+  if total > target:
+    return total
+  mul_res = verify(target, total * nums[0], nums[1:])
+  if mul_res == target:
+    return mul_res
+  add_res = verify(target, total + nums[0], nums[1:])
+  if add_res == target:
+    return add_res
+  return verify(target, int(str(total) + str(nums[0])), nums[1:])
+
 lines = open('data2.txt', "r").read().split("\n")
-total = 0
+instructions = []
 for line in [x for x in lines if x]:
-  print(line)
-print(total)
+  result = int(line.split(':')[0])
+  rest = [int(x) for x in line.split(': ')[1].split(' ')]
+  instructions.append([result] + rest)
+
+result = 0
+for instruction in instructions:
+  target = instruction[0]
+  total = instruction[1]
+  nums = instruction[2:]
+  if target == verify(target, total, nums):
+    result += target
+
+print(result)
